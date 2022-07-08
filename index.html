@@ -7,7 +7,57 @@
     <title>Zuckercube</title>
     <link rel="stylesheet" href="style/style.css">
   </head>
+
   <body>
-	<script src="js/index.js"></script>
+	  <script src="js/three.js"></script>
+    <script>
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+
+      const renderer = new THREE.WebGLRenderer();
+      
+      const loader = new THREE.TextureLoader();
+      
+      var cubes = [];
+      var boxScale = 3;
+
+      loader.load('images/zuck.jpg', (textures) => {
+        const material = new THREE.MeshBasicMaterial({
+          map: textures,
+        });
+        const geometry = new THREE.BoxGeometry( 1 * boxScale, 1 * boxScale, 1 *boxScale);
+        const cube = new THREE.Mesh( geometry, material );
+        scene.add( cube );
+        cubes.push(cube);
+      });
+      
+      renderer.setSize( window.innerWidth, window.innerHeight );
+      document.body.appendChild( renderer.domElement );
+
+      
+      camera.position.z = 5;
+      const scale = .5;
+      
+      function animate() {
+        requestAnimationFrame(animate);
+        
+        update();
+
+        renderer.render(scene, camera);
+      }
+
+      function update() {
+        cubes.forEach(cube => {
+          cube.rotation.x += .01 * scale;
+          cube.rotation.z += .01 * scale;
+        });
+      }
+
+      animate();
+    </script>
+
+    <style>body {
+      overflow: hidden;
+    }</style>
   </body>
 </html>
